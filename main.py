@@ -1,4 +1,4 @@
-from datetime import date, datetime
+from datetime import date, datetime, timedelta, timezone
 import math
 from wechatpy import WeChatClient
 from wechatpy.client.api import WeChatMessage, WeChatTemplate
@@ -9,20 +9,23 @@ import random
 today = datetime.now()
 start_date = os.environ['START_DATE']
 city = os.environ['CITY']
-birthday = os.environ['BIRTHDAY']
-
+birthday = start_date[5:]
 app_id = os.environ["APP_ID"]
 app_secret = os.environ["APP_SECRET"]
-
-user_ids = os.environ["USER_ID"].split("\n")
+user_id = os.environ["USER_ID"]
 template_id = os.environ["TEMPLATE_ID"]
 
+def get_time():
+  BJ_tz = timezone(timedelta(hours=8), 'Asia/Shanghai')
+  dictDate={'Monday':'星期一','Tuesday':'星期二','Wednesday':'星期三','Thursday':'星期四','Friday':'星期五','Saturday':'星期六','Sunday':'星期天'}
+  a=dictDate[datetime.now(BJ_tz).strftime('%A')]
+  return datetime.now(BJ_tz).strftime("%Y年%m月%d日 %H时%M分 ")+a
 
 def get_weather():
   url = "http://autodev.openspeech.cn/csp/api/v2.1/weather?openId=aiuicus&clientType=android&sign=android&city=" + city
   res = requests.get(url).json()
   weather = res['data']['list'][0]
-  return weather['weather'], math.floor(weather['temp']), math.floor(weather['high']), math.floor(weather['low'])
+  return weather['weather'], math.floor(weather['high']), math.floor(weather['low']), weather['city']
 
 def get_count():
   delta = today - datetime.strptime(start_date, "%Y-%m-%d")
@@ -47,11 +50,17 @@ def get_random_color():
 client = WeChatClient(app_id, app_secret)
 
 wm = WeChatMessage(client)
-wea, temperature, highest, lowest = get_weather()
-data = {"weather":{"value":wea,"color":get_random_color()},"temperature":{"value":temperature,"color":get_random_color()},"love_days":{"value":get_count(),"color":get_random_color()},"birthday_left":{"value":get_birthday(),"color":get_random_color()},"words":{"value":get_words(),"color":get_random_color()},"highest": {"value":highest,"color":get_random_color()},"lowest":{"value":lowest, "color":get_random_color()}}
-count = 0
-for user_id in user_ids:
-  res = wm.send_template(user_id, template_id, data)
-  count+=1
+wea, tem_high,tem_low,tem_city = get_weather()
+data=dict()
+data['weather'] = {'value': wea, 'color': '#002fa4'}
+data['city'] = {'value': city, 'color': get_random_color()}
+data['tem_high'] = {'value': tem_high, 'color': '#470024'}
+data['tem_low'] = {'value': tem_low, 'color': '#01847F'}
+data['time'] = {'value': get_time(), 'color': get_random_color()}
+data['born_days'] = {'value': get_count(), 'color': get_random_color()}
+data['birthday_left'] = {'value': get_birthday(), 'color': get_random_color()}
+data['words'] = {'value': get_words(), 'color': get_random_color()}
 
-print("发送了" + str(count) + "条消息")
+res = wm.send_template(user_id, template_id, data)
+print(res)
+print(get_count())
