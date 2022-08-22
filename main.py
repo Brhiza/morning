@@ -47,7 +47,7 @@ def get_yiyan():
   words = requests.get("https://v1.hitokoto.cn/?c=k")
   if words.status_code != 200:
     return get_yiyan()
-  return yiyan.json()['data']['text']
+  return yiyan.json()['hitokoto']['from']
 
 def get_random_color():
   return "#%06x" % random.randint(0, 0xFFFFFF)
