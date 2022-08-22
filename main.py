@@ -19,7 +19,7 @@ def get_time():
   BJ_tz = timezone(timedelta(hours=8), 'Asia/Shanghai')
   dictDate={'Monday':'星期一','Tuesday':'星期二','Wednesday':'星期三','Thursday':'星期四','Friday':'星期五','Saturday':'星期六','Sunday':'星期天'}
   a=dictDate[datetime.now(BJ_tz).strftime('%A')]
-  return datetime.now(BJ_tz).strftime("%Y年%m月%d日 %H时%M分 ")+a
+  return datetime.now(BJ_tz).strftime("%Y年%m月%d日 ")+a
 
 def get_weather():
   url = "http://autodev.openspeech.cn/csp/api/v2.1/weather?openId=aiuicus&clientType=android&sign=android&city=" + city
