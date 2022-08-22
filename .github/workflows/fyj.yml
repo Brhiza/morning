@@ -22,7 +22,7 @@ jobs:
     env:
       APP_ID: ${{ secrets.APP_ID }}
       APP_SECRET: ${{ secrets.APP_SECRET }}
-      TEMPLATE_ID: 'pJyD3xpCtZ2Y33Zl7haefE5IXEr1w4a6g9YGOmBofNE'
+      TEMPLATE_ID: '4vCirn34dQsWKcGo8gQa3dNGzpeawwCBZdESNSWxLwI'
       USER_ID: 'oDdtc5nKTvUCGJYbmbMUfB4gv5-Y'
       START_DATE: '1921-07-23'
       CITY: '顺德'
