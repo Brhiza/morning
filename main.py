@@ -43,6 +43,12 @@ def get_words():
     return get_words()
   return words.json()['data']['text']
 
+def get_yiyan():
+  words = requests.get("https://v1.hitokoto.cn/?c=k")
+  if words.status_code != 200:
+    return get_yiyan()
+  return yiyan.json()['data']['text']
+
 def get_random_color():
   return "#%06x" % random.randint(0, 0xFFFFFF)
 
@@ -57,6 +63,7 @@ data['city'] = {'value': city, 'color': get_random_color()}
 data['tem_high'] = {'value': tem_high, 'color': '#470024'}
 data['tem_low'] = {'value': tem_low, 'color': '#01847F'}
 data['time'] = {'value': get_time(), 'color': get_random_color()}
+data['yiyan'] = {'value': get_time(), 'color': get_random_color()}
 data['born_days'] = {'value': get_count(), 'color': get_random_color()}
 data['birthday_left'] = {'value': get_birthday(), 'color': get_random_color()}
 data['words'] = {'value': get_words(), 'color': get_random_color()}
