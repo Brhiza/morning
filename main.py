@@ -7,7 +7,6 @@ import os
 import random
 
 today = datetime.now()
-start_date = os.environ['START_DATE']
 city = os.environ['CITY']
 birthday = os.environ['BIRTHDAY']
 
@@ -24,9 +23,6 @@ def get_weather():
   weather = res['data']['list'][0]
   return weather['weather'], math.floor(weather['temp']), math.floor(weather['high']), math.floor(weather['low'])
 
-def get_count():
-  delta = today - datetime.strptime(start_date, "%Y-%m-%d")
-  return delta.days
 
 def get_birthday():
   next = datetime.strptime(str(date.today().year) + "-" + birthday, "%Y-%m-%d")
